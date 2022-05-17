@@ -1,0 +1,150 @@
+insert
+####
+
+controller===There are two function 
+
+public function payfee(){
+
+		if ($this->input->post('save')) {
+			
+			$data['student_name']=$this->input->post('student_name');
+			$data['course_fee']=$this->input->post('course_fee');
+			$data['batch_id']=$this->input->post('batch_id');
+			$data['discount']=$this->input->post('discount');
+			$data['instalation_date']=$this->input->post('instalation_date');
+			$data['fee_after_discount']=$this->input->post('fee_after_discount');
+			$data['gender']=$this->input->post('gender');
+			$data['remaining_amount']=$this->input->post('remaining_amount');
+			$data['native_p_']=$this->input->post('native_p_');
+			$data['Payment_mode']=$this->input->post('Payment_mode');
+			$data['course']=$this->input->post('course');
+			$data['paid_so_for']=$this->input->post('paid_so_for');
+			$data['contact_nu']=$this->input->post('contact_nu');
+			$data['due_amount']=$this->input->post('due_amount');
+			$data['email_id']=$this->input->post('email_id');
+			$data['due_date']=$this->input->post('due_date');
+			$data['date']=$this->input->post('date');
+
+			$payfee =$this->User->savepayfee($data);
+			if ($payfee == true) {
+				echo "<script>alert('Payfee Successfully Inserted!!')</script>";
+			       	 redirect('pay-fee', 'refresh');
+			}
+			else{
+				echo "<script>alert('Error Payfee Not Inserted!!')</script>";
+			       	 redirect('pay-fee', 'refresh');	
+			}
+
+		}
+
+	}
+
+	/*batch*/
+
+	public function batch(){
+		if ($this->input->post('save')) {
+
+			$image_name = 'blank';
+
+			$image_name = 'blank';
+
+      if (isset($_FILES['upload_batch_photo']['name'])) {
+        if ($_FILES['upload_batch_photo']['name'] != '') {
+          $image_name = $_FILES['upload_batch_photo']['name'];
+          $target_dir = "uploads/uploadbatch/";
+          $target_file = $target_dir . basename($_FILES["upload_batch_photo"]["name"]);
+          move_uploaded_file($_FILES["upload_batch_photo"]["tmp_name"], $target_file);
+        }
+        
+      }
+      else{
+        		echo "<script>alert('File Uploading hase been Failed!!')</script>";
+
+        }
+			
+			$data['batch_id']=$this->input->post('batch_id');
+			$data['batch_name']=$this->input->post('batch_name');
+			$data['batch_time']=$this->input->post('batch_time');
+			$data['batch_strating_time']=$this->input->post('batch_strating_time');
+			$data['duration']=$this->input->post('duration');
+			$data['course']=$this->input->post('course');
+			$data['faculty']=$this->input->post('faculty');
+			$data['upload_batch_photo']=$image_name;
+
+			$batch =$this->User->batch($data);
+			if ($batch == true) {
+				echo "<script>alert('Batch Successfully Inserted!!')</script>";
+				redirect('batch','refresh');
+			}
+			else{
+				echo "<script>alert('Batch Not Inserted!!')</script>";
+				redirect('batch','refresh');
+			}
+
+
+		}
+	}
+  
+  
+  model===
+  
+  //login
+
+	public function login_user($email,$password){
+		 $this->db->where('email', $email);
+        $this->db->where('password', $password);
+        $query = $this->db->get('user_login');
+			//return $query->result();
+			if ($query->num_rows()) {
+				
+				return $query->row()->id; 
+			}
+			else{
+				return false;
+			}
+    	
+	}
+
+	//forgot -email
+
+	public function forgot_email($email){
+
+		$this->db->where('email',$email);
+		$get = $this->db->get('user_login');
+		return $get->result();
+
+	}
+    
+
+	// chnge password
+
+	public function change_password($password){
+		$id=$_SESSION['id_'];
+		$this->db->set('password',$password);
+		$this->db->where('id',$id);
+		$this->db->update('user_login');
+		return true;
+	}
+
+    //enquiry
+    function saverecords($data)
+	{
+        $this->db->insert('enquiry',$data);
+        return true;
+	}  
+  
+    public function delete_current_opening($id){
+		    $this->db->where("id",$id);
+			$this->db->delete('current_opening');
+			return true;
+		    
+		}
+
+		//get_view_payment
+
+		public function get_view_payment(){
+			$query = $this->db->get('payfee');
+			return $query->result();
+		}
+  
+
