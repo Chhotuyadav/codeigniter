@@ -17,3 +17,16 @@
       		
       }
 		}
+
+
+
+//session
+
+
+<?php
+
+	if( !isset($_SESSION['id_']) ){
+		redirect(base_url(),'refresh');
+		die();
+	}
+	?>
