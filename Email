@@ -1,0 +1,45 @@
+public function forgot_pass(){
+				$email = $this->input->post('email_forgote');
+
+				$result = $this->User->forgot_email($email);
+
+				if (empty($result)) {
+          echo "<script>alert('Email is  Not Registerd!!')</script>";
+		 			redirect(base_url(),'refresh');
+						
+				}
+				else{
+					foreach ($result as $row ) {
+					 
+						    $config = Array(
+						  'protocol' => 'smtp',
+						  'smtp_host' => 'ssl://smtp.googlemail.com',
+						  'smtp_port' => 465,
+						  'smtp_user' => 'kanika.systos04@gmail.com', // change it to yours
+						  'smtp_pass' => 'systos04@k', // change it to yours
+						  'mailtype' => 'html',
+						  'charset' => 'iso-8859-1',
+						  'wordwrap' => TRUE
+						);
+
+						        $message = 'Your Password :-'.$row->password;
+						      $this->load->library('email', $config);
+						      $this->email->set_newline("\r\n");
+						      $this->email->from('kanika.systos04@gmail.com'); // change it to yours
+						      $this->email->to($email);// change it to yours
+						      $this->email->subject('Forgot Password | Minj Education');
+						      $this->email->message($message);
+						      if($this->email->send())
+						     {
+						      echo "<script> alert('Password Sent to your Email!') </script>";
+				       	 	redirect('home', 'refresh');
+						     }
+						     else
+						    {
+						     show_error($this->email->print_debugger());
+						    }
+
+
+					}
+		}
+	}
