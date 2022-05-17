@@ -1,0 +1,15 @@
+$image_name = 'blank';
+
+      if (isset($_FILES['upload_batch_photo']['name'])) {
+        if ($_FILES['upload_batch_photo']['name'] != '') {
+          $image_name = $_FILES['upload_batch_photo']['name'];
+          $target_dir = "uploads/uploadbatch/";
+          $target_file = $target_dir . basename($_FILES["upload_batch_photo"]["name"]);
+          move_uploaded_file($_FILES["upload_batch_photo"]["tmp_name"], $target_file);
+        }
+        
+      }
+      else{
+        		echo "<script>alert('File Uploading hase been Failed!!')</script>";
+
+        }
